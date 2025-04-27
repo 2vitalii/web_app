@@ -1,5 +1,7 @@
+// todoRoutes.js
+
 import express from 'express';
-import prisma from '../prismaClient.js';
+import prisma from './prismaClient.js';
 
 const router = express.Router();
 
@@ -27,13 +29,9 @@ router.get('/', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   const { task } = req.body;
-
   try {
     const newTodo = await prisma.todo.create({
-      data: {
-        task,
-        userId: req.userId
-      }
+      data: { task, userId: req.userId }
     });
     res.json(newTodo);
   } catch (error) {
@@ -50,15 +48,10 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const todoId = Number(req.params.id);
   const { completed } = req.body;
-
   try {
     const updated = await prisma.todo.update({
-      where: {
-        id_userId: { id: todoId, userId: req.userId }
-      },
-      data: {
-        completed: Boolean(completed)
-      }
+      where: { id_userId: { id: todoId, userId: req.userId } },
+      data: { completed: Boolean(completed) }
     });
     res.json(updated);
   } catch (error) {
@@ -74,12 +67,9 @@ router.put('/:id', async (req, res) => {
  */
 router.delete('/:id', async (req, res) => {
   const todoId = Number(req.params.id);
-
   try {
     await prisma.todo.delete({
-      where: {
-        id_userId: { id: todoId, userId: req.userId }
-      }
+      where: { id_userId: { id: todoId, userId: req.userId } }
     });
     res.json({ message: 'Todo deleted' });
   } catch (error) {
@@ -89,3 +79,4 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
+
