@@ -1,5 +1,7 @@
+// public/js/app.js
+
 // Minimalist frontend logic
-const apiBase = '';
+const apiBase = ''; // when served from same origin, leave empty
 
 const authDiv = document.getElementById('auth');
 const todoDiv = document.getElementById('todo-section');
@@ -34,7 +36,7 @@ async function auth(action) {
   }
 
   try {
-    const res = await fetch(`/auth/${action}`, {
+    const res = await fetch(`${apiBase}/auth/${action}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ username, password })
@@ -59,7 +61,7 @@ async function showTodos() {
   todoList.innerHTML = '';
 
   const token = localStorage.getItem('token');
-  const res = await fetch('/todos', {
+  const res = await fetch(`${apiBase}/todos`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
   if (!res.ok) {
@@ -99,7 +101,7 @@ async function addTodo() {
   newTaskInput.value = '';
 
   const token = localStorage.getItem('token');
-  const res = await fetch('/todos', {
+  const res = await fetch(`${apiBase}/todos`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -118,7 +120,7 @@ async function addTodo() {
 // Toggle completed status
 async function toggleTodo(id, completed, li) {
   const token = localStorage.getItem('token');
-  const res = await fetch(`/todos/${id}`, {
+  const res = await fetch(`${apiBase}/todos/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -136,7 +138,7 @@ async function toggleTodo(id, completed, li) {
 // Delete a todo
 async function deleteTodo(id, li) {
   const token = localStorage.getItem('token');
-  const res = await fetch(`/todos/${id}`, {
+  const res = await fetch(`${apiBase}/todos/${id}`, {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${token}` }
   });
@@ -156,3 +158,4 @@ function logout() {
   passwordInput.value = '';
   todoList.innerHTML = '';
 }
+
