@@ -1,3 +1,5 @@
+// authRoutes.js
+
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -15,28 +17,18 @@ const router = express.Router();
  */
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
-
-  // Hash the incoming password
   const hashedPassword = bcrypt.hashSync(password, 8);
 
   try {
-    // Create user record
     const user = await prisma.user.create({
-      data: {
-        username,
-        password: hashedPassword
-      }
+      data: { username, password: hashedPassword }
     });
 
-    // Create a default todo for new users
+    // Create a default todo for new user
     await prisma.todo.create({
-      data: {
-        task: 'Welcome! Add your first todo.',
-        userId: user.id
-      }
+      data: { task: 'Welcome! Add your first todo.', userId: user.id }
     });
 
-    // Generate JWT token valid for 24 hours
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: '24h'
     });
@@ -57,22 +49,16 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Fetch user by username
-    const user = await prisma.user.findUnique({
-      where: { username }
-    });
-
+    const user = await prisma.user.findUnique({ where: { username } });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Verify password
     const isValid = bcrypt.compareSync(password, user.password);
     if (!isValid) {
       return res.status(401).json({ message: 'Incorrect password' });
     }
 
-    // Issue JWT token
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: '24h'
     });
