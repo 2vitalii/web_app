@@ -1,0 +1,29 @@
+// Prisma schema for SQLite database
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User model: holds authentication info
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  todos    Todo[]
+}
+
+// Todo model: each task belongs to a user
+model Todo {
+  id        Int     @id @default(autoincrement())
+  task      String
+  completed Boolean @default(false)
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+
+  // Ensure a compound unique key on id + userId
+  @@unique([id, userId])
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minimalist Todo</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Authentication Form -->
+    <div id="auth">
+      <h2>Todo App</h2>
+      <input id="username" type="text" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <div class="buttons">
+        <button id="btn-login">Log In</button>
+        <button id="btn-register">Register</button>
+      </div>
+      <p id="auth-error" class="error"></p>
+    </div>
+
+    <!-- Todo List -->
+    <div id="todo-section" class="hidden">
+      <div class="header">
+        <h2>Your Todos</h2>
+        <button id="btn-logout">Log Out</button>
+      </div>
+      <ul id="todo-list"></ul>
+      <div class="add-todo">
+        <input id="new-task" type="text" placeholder="New task…" />
+        <button id="btn-add">Add</button>
+      </div>
+      <p id="todo-error" class="error"></p>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
